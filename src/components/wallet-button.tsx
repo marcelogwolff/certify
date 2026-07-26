@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { address as solanaAddress } from "@solana/kit";
 import {
   useConnect,
@@ -111,7 +111,19 @@ function WalletControls({ onConnectionChange }: WalletButtonProps) {
   );
 }
 
+const noopSubscribe = () => () => {};
+
+function useHasMounted() {
+  return useSyncExternalStore(noopSubscribe, () => true, () => false);
+}
+
 export function WalletButton(props: WalletButtonProps) {
+  const hasMounted = useHasMounted();
+
+  if (!hasMounted) {
+    return <span className="wallet-loading">Detectando carteiras…</span>;
+  }
+
   return (
     <WalletReadyGate client={solanaClient} fallback={<span className="wallet-loading">Detectando carteiras…</span>}>
       <WalletControls {...props} />
