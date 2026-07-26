@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { WalletButton } from "@/components/wallet-button";
 
 export function Header() {
   return (
@@ -9,9 +10,11 @@ export function Header() {
       </Link>
 
       <nav className="nav-links" aria-label="Navegação principal">
+        <Link href="/meus-certificados">Meus certificados</Link>
         <Link href="/verificar/CERT-7K4M2P">Verificar</Link>
         <Link href="/emitir">Emitir certificado</Link>
       </nav>
+      <div className="header-wallet"><WalletButton /></div>
     </header>
   );
 }

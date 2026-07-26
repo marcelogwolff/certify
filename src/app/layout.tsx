@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SolanaProviders } from "@/components/solana-providers";
 
 export const metadata: Metadata = {
   title: "Certify — Certificados verificáveis na Solana",
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body><SolanaProviders>{children}</SolanaProviders></body>
     </html>
   );
 }

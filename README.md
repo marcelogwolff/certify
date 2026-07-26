@@ -1,14 +1,19 @@
 # Certify
 
-Aplicação para emissão e validação de certificados verificáveis na **Solana Devnet**.
+Aplicação full stack para emissão e validação de certificados verificáveis na **Solana Devnet**.
 
-Este repositório contém a primeira etapa do MVP: interface navegável para emissão e verificação, construída com Next.js, TypeScript e Tailwind CSS. A conexão de carteira, o mint do badge e o banco de dados serão adicionados nas próximas etapas descritas em [CERTIFY_MVP.md](./CERTIFY_MVP.md).
+Construído com Next.js, TypeScript, Tailwind CSS, `@solana/kit` (Wallet Standard) e Supabase. A emissão cria um badge on-chain real: um mint **Token-2022** (decimais 0, supply 1) com nome/URI gravados diretamente no mint via a extensão de metadata, enviado para a wallet do participante.
 
 ## Páginas atuais
 
 - `/` — página inicial do produto.
-- `/emitir` — formulário visual de emissão.
-- `/verificar/CERT-7K4M2P` — exemplo de página pública de verificação.
+- `/emitir` — conecta a carteira emissora autorizada, minta o badge na Devnet e salva o certificado.
+- `/sucesso/[codigo]` — confirmação da emissão com links para o Explorer.
+- `/verificar/[codigo]` — página pública de verificação.
+- `/meus-certificados` — certificados recebidos pela carteira conectada.
+- `/api/certificates` — cria (`POST`) e lista por wallet (`GET ?wallet=`).
+- `/api/certificates/[codigo]` — consulta pública por código.
+- `/api/certificates/[codigo]/metadata` — JSON de metadata do NFT (usado pelo mint e por carteiras/exploradores).
 
 ## Rodar localmente
 
@@ -28,9 +33,33 @@ npm run lint
 npm run build
 ```
 
-## Próxima etapa
+## Banco de dados (Supabase)
 
-Adicionar Solana Wallet Adapter e conectar a Phantom na Devnet. Depois disso, implementaremos o fluxo real de emissão e a página de validação consultando dados on-chain e Supabase.
+A consulta pública de certificados usa Supabase no servidor. Crie um projeto no
+Supabase, abra o **SQL Editor** e execute o arquivo
+[`supabase/migrations/20260725_create_certificates.sql`](./supabase/migrations/20260725_create_certificates.sql).
+
+Em seguida, preencha no `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://<seu-projeto>.supabase.co
+SUPABASE_SECRET_KEY=sb_secret_<sua-chave-de-servidor>
+```
+
+Em projetos antigos, `SUPABASE_SERVICE_ROLE_KEY` pode ser usado no lugar de
+`SUPABASE_SECRET_KEY`. Essas chaves são exclusivas do servidor: nunca use o
+prefixo `NEXT_PUBLIC_` nem compartilhe a chave secret/service role.
+
+A rota `GET /api/certificates/CERT-ABC123` e a página
+`/verificar/CERT-ABC123` leem o certificado pelo código público. O certificado só
+é gravado no Supabase depois que a transação de mint é confirmada na Devnet.
+
+## Autorização de emissão
+
+Defina `NEXT_PUBLIC_ISSUER_WALLETS` no `.env.local` (e na Vercel) com a chave
+pública Solana de quem pode emitir certificados. Aceita múltiplas wallets
+separadas por vírgula. A verificação acontece tanto no cliente (para exibir a
+UI correta) quanto no servidor, na rota `POST /api/certificates`.
 
 ## Segurança
 
