@@ -12,6 +12,10 @@ import {
 import { solanaClient } from "@/components/solana-providers";
 import { shortenAddress } from "@/lib/solana";
 
+function isMobileUserAgent(): boolean {
+  return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
 type WalletButtonProps = {
   onConnectionChange?: (
     walletAddress: string | null,
@@ -125,6 +129,31 @@ function WalletControls({ onConnectionChange }: WalletButtonProps) {
   }
 
   if (wallets.length === 0) {
+    if (isMobileUserAgent()) {
+      const currentUrl = window.location.href;
+      const origin = window.location.origin;
+      const phantomUrl = `https://phantom.app/ul/browse/${encodeURIComponent(currentUrl)}?ref=${encodeURIComponent(origin)}`;
+      const solflareUrl = `https://solflare.com/ul/v1/browse/${encodeURIComponent(currentUrl)}?ref=${encodeURIComponent(origin)}`;
+
+      return (
+        <div className="wallet-unavailable">
+          <strong>Abra esta página dentro do app da sua carteira</strong>
+          <span>
+            No navegador do celular, a carteira não fica disponível diretamente.
+            Abra pelo navegador embutido da Phantom ou Solflare.
+          </span>
+          <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
+            <a className="button button-primary" href={phantomUrl}>
+              Abrir na Phantom
+            </a>
+            <a className="button button-secondary" href={solflareUrl}>
+              Abrir na Solflare
+            </a>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="wallet-unavailable">
         <strong>Nenhuma carteira encontrada</strong>
