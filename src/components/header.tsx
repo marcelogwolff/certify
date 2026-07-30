@@ -12,9 +12,12 @@ export function Header() {
       <nav className="nav-links" aria-label="Navegação principal">
         <Link href="/meus-certificados">Meus certificados</Link>
         <Link href="/verificar/CERT-7K4M2P">Verificar</Link>
+        <Link href="/instituicoes">Sou uma instituição</Link>
         <Link href="/emitir">Emitir certificado</Link>
       </nav>
-      <div className="header-wallet"><WalletButton /></div>
+      <div className="header-wallet">
+        <WalletButton />
+      </div>
     </header>
   );
 }

@@ -1,6 +1,6 @@
 import "server-only";
 
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseAdminClient } from "@/lib/supabase-admin";
 
 export type CertificateStatus = "active" | "pending" | "revoked";
 
@@ -13,6 +13,7 @@ export type Certificate = {
   workloadHours: number;
   issuedAt: string;
   issuerWallet: string;
+  issuerName: string | null;
   mintAddress: string | null;
   transactionSignature: string | null;
   metadataUri: string | null;
@@ -29,23 +30,13 @@ type CertificateRow = {
   workload_hours: number;
   issued_at: string;
   issuer_wallet: string;
+  issuer_name: string | null;
   mint_address: string | null;
   transaction_signature: string | null;
   metadata_uri: string | null;
   status: CertificateStatus;
   created_at: string;
 };
-
-function getSupabaseAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const secretKey = process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !secretKey) return null;
-
-  return createClient(url, secretKey, {
-    auth: { autoRefreshToken: false, persistSession: false },
-  });
-}
 
 function toCertificate(row: CertificateRow): Certificate {
   return {
@@ -57,6 +48,7 @@ function toCertificate(row: CertificateRow): Certificate {
     workloadHours: row.workload_hours,
     issuedAt: row.issued_at,
     issuerWallet: row.issuer_wallet,
+    issuerName: row.issuer_name,
     mintAddress: row.mint_address,
     transactionSignature: row.transaction_signature,
     metadataUri: row.metadata_uri,
@@ -65,7 +57,9 @@ function toCertificate(row: CertificateRow): Certificate {
   };
 }
 
-export async function getCertificateByCode(code: string): Promise<Certificate | null> {
+export async function getCertificateByCode(
+  code: string,
+): Promise<Certificate | null> {
   const supabase = getSupabaseAdminClient();
   if (!supabase) return null;
 
@@ -83,7 +77,9 @@ export async function getCertificateByCode(code: string): Promise<Certificate | 
   return data ? toCertificate(data) : null;
 }
 
-export async function listCertificatesByWallet(wallet: string): Promise<Certificate[]> {
+export async function listCertificatesByWallet(
+  wallet: string,
+): Promise<Certificate[]> {
   const supabase = getSupabaseAdminClient();
   if (!supabase) return [];
 
@@ -111,6 +107,7 @@ export type NewCertificateInput = {
   workloadHours: number;
   issuedAt: string;
   issuerWallet: string;
+  issuerName: string;
   metadataUri: string;
   mintAddress: string;
   transactionSignature: string;
@@ -118,7 +115,9 @@ export type NewCertificateInput = {
 
 export class DuplicateCertificateError extends Error {}
 
-export async function createCertificate(input: NewCertificateInput): Promise<Certificate> {
+export async function createCertificate(
+  input: NewCertificateInput,
+): Promise<Certificate> {
   const supabase = getSupabaseAdminClient();
   if (!supabase) throw new Error("Supabase não está configurado no servidor.");
 
@@ -132,6 +131,7 @@ export async function createCertificate(input: NewCertificateInput): Promise<Cer
       workload_hours: input.workloadHours,
       issued_at: input.issuedAt,
       issuer_wallet: input.issuerWallet,
+      issuer_name: input.issuerName,
       metadata_uri: input.metadataUri,
       mint_address: input.mintAddress,
       transaction_signature: input.transactionSignature,

@@ -60,7 +60,10 @@ export async function mintCertificateBadge({
     decimals: 0,
   });
 
-  const result = await solanaClient.sendTransaction([createMintPlan, mintToPlan]);
+  const result = await solanaClient.sendTransaction([
+    createMintPlan,
+    mintToPlan,
+  ]);
 
   return {
     mintAddress: newMint.address,
