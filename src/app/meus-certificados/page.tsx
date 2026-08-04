@@ -22,7 +22,11 @@ export default function MyCertificatesPage() {
     fetch(`/api/certificates?wallet=${encodeURIComponent(walletAddress)}`)
       .then((response) => response.json())
       .then((body) => {
-        if (isCurrent) setResult({ wallet: walletAddress, certificates: body.certificates ?? [] });
+        if (isCurrent)
+          setResult({
+            wallet: walletAddress,
+            certificates: body.certificates ?? [],
+          });
       })
       .catch(() => {
         if (isCurrent) setResult({ wallet: walletAddress, certificates: [] });
@@ -33,7 +37,8 @@ export default function MyCertificatesPage() {
     };
   }, [walletAddress]);
 
-  const certificates = result?.wallet === walletAddress ? result.certificates : null;
+  const certificates =
+    result?.wallet === walletAddress ? result.certificates : null;
   const isLoading = walletAddress !== null && certificates === null;
 
   return (
@@ -43,11 +48,16 @@ export default function MyCertificatesPage() {
         <div className="page-heading">
           <span className="eyebrow">Participante · Devnet</span>
           <h1>Seus certificados.</h1>
-          <p>Conecte a carteira que recebeu os badges para ver os certificados emitidos para ela.</p>
+          <p>
+            Conecte a carteira que recebeu os badges para ver os certificados
+            emitidos para ela.
+          </p>
         </div>
 
         <div style={{ marginTop: 24, maxWidth: 360 }}>
-          <WalletButton onConnectionChange={(address) => setWalletAddress(address)} />
+          <WalletButton
+            onConnectionChange={(address) => setWalletAddress(address)}
+          />
         </div>
 
         {!walletAddress && (
@@ -57,17 +67,28 @@ export default function MyCertificatesPage() {
         )}
 
         {walletAddress && isLoading && (
-          <p className="form-note" style={{ marginTop: 24, textAlign: "left" }}>Carregando certificados…</p>
-        )}
-
-        {walletAddress && !isLoading && certificates && certificates.length === 0 && (
           <p className="form-note" style={{ marginTop: 24, textAlign: "left" }}>
-            Nenhum certificado encontrado para esta carteira.
+            Carregando certificados…
           </p>
         )}
 
+        {walletAddress &&
+          !isLoading &&
+          certificates &&
+          certificates.length === 0 && (
+            <p
+              className="form-note"
+              style={{ marginTop: 24, textAlign: "left" }}
+            >
+              Nenhum certificado encontrado para esta carteira.
+            </p>
+          )}
+
         {walletAddress && certificates && certificates.length > 0 && (
-          <div className="issue-grid" style={{ marginTop: 24, gridTemplateColumns: "1fr" }}>
+          <div
+            className="issue-grid"
+            style={{ marginTop: 24, gridTemplateColumns: "1fr" }}
+          >
             {certificates.map((certificate) => (
               <Link
                 key={certificate.id}
@@ -83,7 +104,8 @@ export default function MyCertificatesPage() {
                   <span className="network-badge">● Devnet</span>
                 </div>
                 <p style={{ margin: 0, color: "var(--muted)" }}>
-                  {certificate.recipientName} · {certificate.workloadHours} horas
+                  {certificate.recipientName} · {certificate.workloadHours}{" "}
+                  horas
                 </p>
               </Link>
             ))}

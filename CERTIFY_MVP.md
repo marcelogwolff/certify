@@ -32,7 +32,8 @@ Critérios que a demo deve comprovar:
 - Landing page do produto.
 - Conexão de carteira.
 - Formulário de emissão de certificado.
-- Restrição simples: apenas carteiras emissoras autorizadas podem emitir.
+- Cadastro de instituições (`/instituicoes`) com aprovação manual por um
+  administrador (`/admin`); só instituições aprovadas podem emitir.
 - Criação e envio de um NFT/badge para a wallet do participante na Devnet.
 - Registro da emissão no banco de dados.
 - Página pública em `/verificar/[codigo]`.
@@ -46,7 +47,7 @@ Critérios que a demo deve comprovar:
 - Login tradicional com senha.
 - Revogação on-chain.
 - PDF oficial assinado digitalmente.
-- Vários administradores com painel completo.
+- Múltiplos administradores (só uma carteira admin fixa aprova instituições).
 
 Esses itens podem virar melhorias depois que o fluxo principal estiver funcionando.
 
@@ -171,7 +172,7 @@ Criar `.env.local` a partir de `.env.example`:
 ```bash
 NEXT_PUBLIC_SOLANA_NETWORK=devnet
 NEXT_PUBLIC_SOLANA_RPC_URL=https://polished-dry-forest.solana-devnet.quiknode.pro/c5943463eb6799a039aee8340e2028f80bcc570d/
-NEXT_PUBLIC_ISSUER_WALLETS=COLE_AQUI_A_SUA_WALLET_PUBLICA
+NEXT_PUBLIC_ADMIN_WALLET=COLE_AQUI_A_SUA_WALLET_PUBLICA
 
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=

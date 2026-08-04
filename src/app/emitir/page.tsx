@@ -26,7 +26,9 @@ export default function IssueCertificatePage() {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const [recipientName, setRecipientName] = useState("");
-  const [courseName, setCourseName] = useState("Workshop de Desenvolvimento Solana");
+  const [courseName, setCourseName] = useState(
+    "Workshop de Desenvolvimento Solana",
+  );
   const [workloadHours, setWorkloadHours] = useState("4");
   const [issuedAt, setIssuedAt] = useState("");
   const [recipientWallet, setRecipientWallet] = useState("");
@@ -41,7 +43,9 @@ export default function IssueCertificatePage() {
     setErrorMessage(null);
 
     if (!walletAddress || !isAuthorized) {
-      setErrorMessage("Conecte uma carteira autorizada para emitir certificados.");
+      setErrorMessage(
+        "Conecte uma carteira autorizada para emitir certificados.",
+      );
       return;
     }
 
@@ -204,7 +208,13 @@ export default function IssueCertificatePage() {
               }}
             />
             {walletAddress && (
-              <p className={isAuthorized ? "issuer-status issuer-authorized" : "issuer-status issuer-denied"}>
+              <p
+                className={
+                  isAuthorized
+                    ? "issuer-status issuer-authorized"
+                    : "issuer-status issuer-denied"
+                }
+              >
                 {isAuthorized
                   ? "Carteira autorizada para emitir certificados."
                   : "Esta carteira está conectada, mas não está autorizada a emitir."}
@@ -225,7 +235,15 @@ export default function IssueCertificatePage() {
             {errorMessage && <p className="wallet-error">{errorMessage}</p>}
 
             <p className="form-note">
-              Adicione sua chave pública em NEXT_PUBLIC_ISSUER_WALLETS para autorizar a emissão.
+              Sua instituição ainda não está autorizada?{" "}
+              <Link
+                className="text-link"
+                href="/instituicoes"
+                style={{ display: "inline", marginTop: 0 }}
+              >
+                Cadastre-se aqui
+              </Link>
+              .
             </p>
           </form>
 
@@ -241,7 +259,9 @@ export default function IssueCertificatePage() {
               <p className="preview-detail">
                 {workloadHours || "0"} horas · {issuedAt || "Data de conclusão"}
               </p>
-              <span className="preview-footer">Verificável na Solana Devnet</span>
+              <span className="preview-footer">
+                Verificável na Solana Devnet
+              </span>
             </div>
             <Link className="text-link" href="/verificar/CERT-7K4M2P">
               Ver exemplo de certificado verificado →

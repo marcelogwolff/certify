@@ -30,8 +30,12 @@ export default async function VerifyCertificatePage({
         <section className="page-shell verification-shell empty-state">
           <span className="eyebrow">Verificação · Devnet</span>
           <h1>Certificado não encontrado.</h1>
-          <p>Confira o código de verificação ou peça um novo link ao organizador.</p>
-          <Link className="button button-secondary" href="/">Voltar para a página inicial</Link>
+          <p>
+            Confira o código de verificação ou peça um novo link ao organizador.
+          </p>
+          <Link className="button button-secondary" href="/">
+            Voltar para a página inicial
+          </Link>
         </section>
       </main>
     );
@@ -54,7 +58,9 @@ export default async function VerifyCertificatePage({
     <main>
       <Header />
       <section className="page-shell verification-shell">
-        <div className={`verified-banner ${isActive ? "" : "verification-warning"}`}>
+        <div
+          className={`verified-banner ${isActive ? "" : "verification-warning"}`}
+        >
           <span className="verified-icon">{isActive ? "✓" : "!"}</span>
           <div>
             <strong>{statusTitle}</strong>
@@ -71,8 +77,13 @@ export default async function VerifyCertificatePage({
             <div className="gold-rule" />
             <p className="awarded">Este certificado foi concedido a</p>
             <h2>{certificate.recipientName}</h2>
-            <p className="certificate-meta">{certificate.workloadHours} horas · {formatDate(certificate.issuedAt)}</p>
-            <div className="certificate-code">{certificate.verificationCode}</div>
+            <p className="certificate-meta">
+              {certificate.workloadHours} horas ·{" "}
+              {formatDate(certificate.issuedAt)}
+            </p>
+            <div className="certificate-code">
+              {certificate.verificationCode}
+            </div>
             <p className="certificate-footnote">Registro na Solana Devnet</p>
           </article>
 
@@ -83,23 +94,61 @@ export default async function VerifyCertificatePage({
             </div>
 
             <dl>
-              <div><dt>Participante</dt><dd>{certificate.recipientName}</dd></div>
-              <div><dt>Wallet participante</dt><dd><code>{shortenAddress(certificate.recipientWallet, 6)}</code></dd></div>
-              <div><dt>Wallet emissora</dt><dd><code>{shortenAddress(certificate.issuerWallet, 6)}</code></dd></div>
-              <div><dt>Mint do badge</dt><dd><code>{certificate.mintAddress ? shortenAddress(certificate.mintAddress, 6) : "Aguardando emissão"}</code></dd></div>
+              <div>
+                <dt>Participante</dt>
+                <dd>{certificate.recipientName}</dd>
+              </div>
+              <div>
+                <dt>Wallet participante</dt>
+                <dd>
+                  <code>{shortenAddress(certificate.recipientWallet, 6)}</code>
+                </dd>
+              </div>
+              <div>
+                <dt>Instituição emissora</dt>
+                <dd>
+                  {certificate.issuerName ??
+                    shortenAddress(certificate.issuerWallet, 6)}
+                </dd>
+              </div>
+              <div>
+                <dt>Wallet emissora</dt>
+                <dd>
+                  <code>{shortenAddress(certificate.issuerWallet, 6)}</code>
+                </dd>
+              </div>
+              <div>
+                <dt>Mint do badge</dt>
+                <dd>
+                  <code>
+                    {certificate.mintAddress
+                      ? shortenAddress(certificate.mintAddress, 6)
+                      : "Aguardando emissão"}
+                  </code>
+                </dd>
+              </div>
             </dl>
 
             {certificate.transactionSignature ? (
-              <a className="button button-dark" href={`https://explorer.solana.com/tx/${certificate.transactionSignature}?cluster=devnet`} target="_blank" rel="noreferrer">
+              <a
+                className="button button-dark"
+                href={`https://explorer.solana.com/tx/${certificate.transactionSignature}?cluster=devnet`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 Abrir no Solana Explorer <span>↗</span>
               </a>
             ) : (
-              <p className="explorer-note">O link do Explorer aparecerá após a confirmação da emissão.</p>
+              <p className="explorer-note">
+                O link do Explorer aparecerá após a confirmação da emissão.
+              </p>
             )}
           </aside>
         </div>
 
-        <Link className="back-link" href="/">← Voltar à página inicial</Link>
+        <Link className="back-link" href="/">
+          ← Voltar à página inicial
+        </Link>
       </section>
     </main>
   );

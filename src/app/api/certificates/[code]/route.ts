@@ -11,13 +11,19 @@ export async function GET(
   const verificationCode = code.toUpperCase();
 
   if (!verificationCodePattern.test(verificationCode)) {
-    return NextResponse.json({ error: "Código de verificação inválido." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Código de verificação inválido." },
+      { status: 400 },
+    );
   }
 
   const certificate = await getCertificateByCode(verificationCode);
 
   if (!certificate) {
-    return NextResponse.json({ error: "Certificado não encontrado." }, { status: 404 });
+    return NextResponse.json(
+      { error: "Certificado não encontrado." },
+      { status: 404 },
+    );
   }
 
   return NextResponse.json({ certificate });
