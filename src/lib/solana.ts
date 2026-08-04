@@ -6,8 +6,12 @@ export const SOLANA_RPC_URL =
   process.env.NEXT_PUBLIC_SOLANA_RPC_URL ?? "https://api.devnet.solana.com";
 
 export function isAdminWallet(walletAddress: string): boolean {
-  const adminWallet = (process.env.NEXT_PUBLIC_ADMIN_WALLET ?? "").trim();
-  return Boolean(adminWallet) && walletAddress === adminWallet;
+  const adminWallets = (process.env.NEXT_PUBLIC_ADMIN_WALLETS ?? "")
+    .split(",")
+    .map((wallet) => wallet.trim())
+    .filter(Boolean);
+
+  return adminWallets.includes(walletAddress);
 }
 
 export function shortenAddress(

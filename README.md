@@ -57,10 +57,11 @@ A rota `GET /api/certificates/CERT-ABC123` e a página
 ## Autorização de emissão
 
 Instituições se cadastram em `/instituicoes` (carteira + nome) e ficam com
-status `pending` até serem aprovadas. Defina `NEXT_PUBLIC_ADMIN_WALLET` no
-`.env.local` (e na Vercel) com a chave pública Solana do administrador da
-plataforma — ele aprova ou rejeita cadastros em `/admin`. Só instituições
-aprovadas (tabela `issuers` no Supabase) conseguem emitir em `/emitir`; a
+status `pending` até serem aprovadas. Defina `NEXT_PUBLIC_ADMIN_WALLETS` no
+`.env.local` (e na Vercel) com a(s) chave(s) pública(s) Solana dos
+administradores da plataforma, separadas por vírgula — eles aprovam ou
+rejeitam cadastros em `/admin`. Só instituições aprovadas (tabela `issuers`
+no Supabase) conseguem emitir em `/emitir`; a
 verificação acontece tanto no cliente (para exibir a UI correta) quanto no
 servidor, na rota `POST /api/certificates`.
 
